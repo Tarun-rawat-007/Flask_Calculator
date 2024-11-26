@@ -1,15 +1,9 @@
 from flask import Flask, render_template, request
 import random
-import wolframalpha
 
-# Initialize Flask app
-app = Flask(__name__)
 
-# Wolfram Alpha API setup
-api_key = "G8WX5E-77XKG66HUA"  # Replace with your actual API key
-client = wolframalpha.Client(api_key)
 
-# Arithmetic operations functions
+
 def add(x, y):
     return x + y
 
@@ -25,12 +19,13 @@ def divide(x, y):
     else:
         return "Error: Division by zero"
 
-# Function to generate random arithmetic problem
+
 def generate_problem(operation, difficulty_level='easy'):
     if difficulty_level == 'easy':
         x, y = random.randint(1, 10), random.randint(1, 10)
-    else:  # difficulty_level == 'hard'
-        x, y = random.randint(10, 100), random.randint(10, 100)
+    else:  
+        x, y = random.randint(1, 100), random.randint(1, 100)
+    
     
     if operation == 'add':
         return f"{x} + {y}"
@@ -39,31 +34,30 @@ def generate_problem(operation, difficulty_level='easy'):
     elif operation == 'multiply':
         return f"{x} * {y}"
     elif operation == 'divide':
-        while y == 0:  # Avoid division by zero
+        while y == 0:  
             y = random.randint(1, 10)
         return f"{x} / {y}"
 
-@app.route("/", methods=["GET", "POST"])
+
+app = Flask(__name__)
+
+@app.route('/', methods=['GET', 'POST'])
 def index():
     result = None
     problem = None
     number1 = ""
     number2 = ""
-    ai_result = ""
-    operation = ""
-    difficulty = ""
-    ai_query = ""  # To store the question asked to AI
+ 
 
-    if request.method == "POST":
-        # Handling basic arithmetic operations
+    if request.method == 'POST':
         if 'calculate' in request.form:
-            number1 = request.form['number1']
-            number2 = request.form['number2']
+            number1 = request.form['number1']  
+            number2 = request.form['number2']  
             operation = request.form['operation']
             
             try:
-                number1 = float(number1)
-                number2 = float(number2)
+                number1 = float(number1)  
+                number2 = float(number2) 
 
                 if operation == 'add':
                     result = add(number1, number2)
@@ -76,23 +70,15 @@ def index():
             except ValueError:
                 result = "Invalid input"
 
-        # Generating a random arithmetic problem
+        
         if 'generate_problem' in request.form:
             operation = request.form['operation']
             difficulty = request.form['difficulty']
             problem = generate_problem(operation, difficulty)
 
-        # Handling WolframAlpha query
-        if 'query' in request.form:
-            ai_query = request.form['query']  # Store the question
-            try:
-                res = client.query(ai_query)
-                ai_answer = next(res.results).text  # Get the answer
-                ai_result = f"Question: {ai_query} \n = {ai_answer}"  # Combine question and answer
-            except Exception as e:
-                ai_result = f"Question: {ai_query}\nError: Could not get a valid result."
+       
 
-    return render_template('index.html', result=result, problem=problem, number1=number1, number2=number2, ai_result=ai_result, operation=operation, difficulty=difficulty)
+    return render_template('index.html', result=result, problem=problem, number1=number1, number2=number2)
 
-if __name__ == "__main__":
+if __name__ == '__main__':
     app.run(debug=True)

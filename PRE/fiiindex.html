@@ -1,0 +1,394 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Generative AI Calculator</title>
+    <style>
+      /* General Body Styling */
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: #f4f4f9;
+    margin: 0;
+    padding: 0;
+    text-align: center;
+    color: #333;
+}
+
+/* Container for the entire page */
+.container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 40px;
+    max-width: 1200px;
+    margin: 0 auto;
+    box-sizing: border-box;
+}
+
+/* Header Styling */
+h1 {
+    font-size: 2.5rem;
+    color: #333;
+    margin-bottom: 30px;
+}
+
+/* Section Container Styling */
+.section-container {
+    width: 100%;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 30px;
+    margin-bottom: 40px;
+}
+
+/* Individual Section Styling */
+.section {
+    background-color: #ffffff;
+    padding: 30px;
+    border-radius: 12px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+    box-sizing: border-box;
+    
+}
+
+
+
+/* Heading inside Sections */
+h2 {
+    font-size: 1.5rem;
+    color: #0E2431;
+    margin-bottom: 15px;
+}
+
+/* Input Fields and Select Box */
+input, select {
+    padding: 12px;
+    margin-bottom: 20px;
+    width: 100%;
+    max-width: 450px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    font-size: 1rem;
+}
+
+/* Button Styling */
+button {
+    background-color: #245b7e;
+    color: #ffffff;
+    padding: 12px 20px;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 1rem;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+    margin-top: 10px;
+}
+
+button:hover {
+    background-color: #1A2B3C;
+    transform: scale(1.05);
+}
+
+button:active {
+    background-color: #1A2B3C;
+}
+
+/* Result and Problem Text */
+.result, .problem, .ai-result {
+    color: #333;
+    font-size: 1.1rem;
+    word-wrap: break-word;
+    margin-top: 15px;
+}
+
+/* AI Section - Full Width Styling */
+.ai-section {
+    background-color: #f9f9f9;
+    padding: 40px 0;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+.ai-form-container {
+    background-color: #ffffff;
+    padding: 30px;
+    border-radius: 12px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+    text-align: center;
+    max-width: 1000px;
+    margin: 0 auto;
+}
+
+/* Media Query for Responsive Design */
+@media (max-width: 800px) {
+    .section-container {
+        grid-template-columns: 1fr; /* Stack sections in one column */
+        gap: 20px;
+    }
+
+    input, select, button {
+        width: 80%; /* Adjust input width on smaller screens */
+    }
+
+    .container {
+        padding: 20px;
+    }
+
+    h1 {
+        font-size: 2rem; /* Reduce header size for smaller screens */
+    }
+}
+
+/* Flexbox Layout for the Form in the AI Section */
+form {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+}
+
+form input {
+    margin-top: 10px;
+    width: 80%;
+    max-width: 400px;
+}
+
+/* Styling the AI Response */
+.ai-result {
+    margin-top: 20px;
+    font-size: 1.2rem;
+    color: #333;
+    word-wrap: break-word;
+}
+
+/* Improved Hover Effect on Form Inputs and Buttons */
+input:focus, select:focus, button:focus {
+    outline: none;
+    border-color: #4CAF50;
+}
+
+        
+    </style>
+</head>
+<body>
+    <nav style="position: fixed; top: 0; left: 0; width: 100%; padding: 12px 20px; transition: all 0.4s ease;">
+        <div class="nav-content" style="height: auto; max-width: 1200px; margin: auto; display: flex; align-items: center; justify-content: space-between;">
+            <ul class="nav-links" style="display: flex; padding: 0; margin: 0;">
+                <li style="list-style: none; margin: 0 8px;">
+                    <a href="#" style="text-decoration: none; color: #0E2431; font-size: 16px; font-weight: 500; padding: 8px 4px; transition: all 0.3s ease;">Home</a>
+                </li>
+               
+                
+                <li style="list-style: none; margin: 0 8px;">
+                    <a href="#Arithmetic Op" style="text-decoration: none; color: #0E2431; font-size: 16px; font-weight: 500; padding: 8px 4px; transition: all 0.3s ease;">Arithmetic Op</a>
+                </li>
+                <li style="list-style: none; margin: 0 8px;">
+                    <a href="#GenerateProblems" style="text-decoration: none; color: #0E2431; font-size: 16px; font-weight: 500; padding: 8px 4px; transition: all 0.3s ease;">GenerateProblems</a>
+                </li>
+                <li style="list-style: none; margin: 0 8px;">
+                    <a href="#Quiz" style="text-decoration: none; color: #0E2431; font-size: 16px; font-weight: 500; padding: 8px 4px; transition: all 0.3s ease;">Quiz</a>
+                </li>
+                <li style="list-style: none; margin: 0 8px;">
+                    <a href="#Assistant" style="text-decoration: none; color: #0E2431; font-size: 16px; font-weight: 500; padding: 8px 4px; transition: all 0.3s ease;">Assistant</a>
+                </li>
+                <li style="list-style: none; margin: 0 8px;">
+                    <a href="#Contacts" style="text-decoration: none; color: #0E2431; font-size: 16px; font-weight: 500; padding: 8px 4px; transition: all 0.3s ease;">Contacts</a>
+                </li>
+            </ul>
+        </div>
+    </nav>
+    
+    
+      <section class="home" style="height: 80vh; width: 100%; background: url('https://manybackgrounds.com/images/hd/touch-screen-calculator-viws5l306kwvq9tu.jpg') no-repeat; background-size: cover; background-position: center; background-attachment: fixed; font-family: 'Ubuntu', sans-serif;">
+      </section>
+    
+      <div class="text" style="text-align: justify; padding: 40px 80px; box-shadow: -5px 0 10px rgba(0, 0, 0, 0.1);">
+        <p>The Calculator is a powerful tool that assists in studying by simplifying complex mathematical problems. Whether it's solving algebraic equations, performing quick arithmetic calculations, or graphing functions, a calculator can save time and increase accuracy. It allows students to focus on understanding mathematical concepts rather than getting bogged down in manual calculations. Additionally, using a calculator regularly builds familiarity with mathematical operations and enhances problem-solving skills.
+
+            For those who need extra help, the Ask AI Math Assistant is available to provide support on a wide range of math topics. From basic arithmetic to advanced calculus, the assistant can guide students through problems step-by-step, offering explanations and alternative approaches to understanding math. With the regular use of both tools, students can improve their math skills and boost their confidence in tackling even the toughest assignments.</p>
+        <br><p>This project is designed to assist students and professionals by providing an easy way to access computational resources. It is developed using the following technologies:<br><br>
+
+            1. Python: The core programming language for building the application.<br>
+            2. Flask: A lightweight web framework used to develop the web interface and manage routing.<br>
+            3. WolframAlpha API: Integrated for advanced computational capabilities, solving mathematical problems and providing scientific data.</p>
+      </div>
+    
+      <script>
+        let nav = document.querySelector("nav");
+        window.onscroll = function() {
+          if(document.documentElement.scrollTop > 20){
+            nav.classList.add("sticky");
+            nav.style.padding = "15px 20px";
+            nav.style.background = "#0E2431";
+            nav.style.boxShadow = "0 5px 10px rgba(0, 0, 0, 0.1)";
+            let links = document.querySelectorAll(".nav-links li a");
+            links.forEach(link => {
+              link.style.color = "#fff";
+            });
+          } else {
+            nav.classList.remove("sticky");
+            nav.style.padding = "20px";
+            nav.style.background = "";
+            nav.style.boxShadow = "";
+            let links = document.querySelectorAll(".nav-links li a");
+            links.forEach(link => {
+              link.style.color = "#0E2431";
+            });
+          }
+        }
+      </script>
+    <div class="container">
+        <!-- Main Heading -->
+        <h1>Generative AI Calculator</h1>
+        
+
+        <!-- Arithmetic Operation and Problem Generation Sections -->
+        <div class="section-container">
+            <!-- Arithmetic Operation Section -->
+            <div class="section" id="Arithmetic Op">
+                <h2>Perform Arithmetic Operation</h2>
+                <form method="POST">
+                    Number 1: <input type="number" name="number1" placeholder="Enter first number" value="{{ number1 }}" required><br>
+                    Number 2: <input type="number" name="number2" placeholder="Enter second number" value="{{ number2 }}" required><br>
+                    <select name="operation">
+                        <option value="add">Add</option>
+                        <option value="subtract">Subtract</option>
+                        <option value="multiply">Multiply</option>
+                        <option value="divide">Divide</option>
+                    </select>
+                    <button type="submit" name="calculate">Calculate</button>
+                    <h2 class="result"> Result: {{ result }} </h2>
+                </form>
+            </div>
+
+            <!-- Generate Problem Section -->
+            <div class="section" id="GenerateProblems">
+                <h2>Generate a Problem</h2>
+                <form method="POST">
+                    <select name="operation">
+                        <option value="add">Addition</option>
+                        <option value="subtract">Subtraction</option>
+                        <option value="multiply">Multiplication</option>
+                        <option value="divide">Division</option>
+                    </select>
+                    <select name="difficulty">
+                        <option value="easy">Easy</option>
+                        <option value="hard">Hard</option>
+                    </select>
+                    <button type="submit" name="generate_problem">Generate Problem</button>
+                    <h2 class="problem">Problem: {{ problem }}</h2>
+                </form>
+            </div>
+        </div>
+         <!-- Quiz Section -->
+         <div class="section" style="padding: 20px; background-color: #f4f4f4; border-radius: 8px; width: 100%; font-family: Arial, sans-serif;" id="Quiz">
+            <h2 style="text-align: center; color: #0E2431;">Arithmetic Quiz </h2>
+            <form id="quizForm" style="display: flex; flex-direction: column; width: 100%; margin: auto;">
+                <div id="quizQuestions" style="width: 100%; margin-bottom: 20px;">
+                    <label style="display: block; width: 100%; margin-bottom: 10px; font-size: 16px;">Question 1: What is 5 + 3?</label>
+                    <input type="text" style="width: 100%; padding: 10px; margin-bottom: 20px; border: 1px solid #ccc; border-radius: 5px;" placeholder="Enter your answer">
+                </div>
+                <button type="submit" id="quizSubmit" style="padding: 10px 20px; background-color: #0E2431; color: white; border: none; border-radius: 5px; font-size: 16px; cursor: pointer; width: 100%;">
+                    Submit Quiz
+                </button>
+            </form>
+            <h2 id="quizResult" style="text-align: center; color: #0E2431; margin-top: 20px;"></h2>
+        </div>
+        
+
+<script>
+    // Function to generate random numbers and quiz
+    function generateRandomQuiz() {
+        const operations = ['add', 'subtract', 'multiply'];
+        const numQuestions = 10;
+        let quizHtml = '';
+        const answers = [];
+
+        for (let i = 0; i < numQuestions; i++) {
+            const num1 = Math.floor(Math.random() * 10) + 1;
+            const num2 = Math.floor(Math.random() * 10) + 1;
+            const operation = operations[Math.floor(Math.random() * operations.length)];
+            let correctAnswer;
+
+            if (operation === 'add') {
+                correctAnswer = num1 + num2;
+            } else if (operation === 'subtract') {
+                correctAnswer = num1 - num2;
+            } else if (operation === 'multiply') {
+                correctAnswer = num1 * num2;
+            } else if (operation === 'divide') {
+                correctAnswer = (num1 / num2).toFixed(2);
+            }
+
+            answers.push(correctAnswer);
+            
+            quizHtml += `
+                <div class="question">
+                    <p>Q${i + 1}: ${num1} ${operation} ${num2} = ?</p>
+                    <input type="number" name="answer${i}" placeholder="Your answer" required>
+                </div>
+            `;
+        }
+
+        document.getElementById('quizQuestions').innerHTML = quizHtml;
+        document.getElementById('quizSubmit').onclick = function(event) {
+            event.preventDefault();
+            calculateScore(answers);
+        };
+    }
+
+    // Function to calculate score
+    function calculateScore(correctAnswers) {
+        let score = 0;
+        for (let i = 0; i < correctAnswers.length; i++) {
+            const userAnswer = document.querySelector(`[name="answer${i}"]`).value;
+            if (parseFloat(userAnswer) === correctAnswers[i]) {
+                score++;
+            }
+        }
+        document.getElementById('quizResult').innerText = `You got ${score} out of 10 correct!`;
+    }
+
+    // Generate quiz on page load
+    window.onload = generateRandomQuiz;
+</script>
+
+        <!-- AI Math Assistant Section (Full Width) -->
+        <div class="ai-section" id="Assistant">
+            <div class="ai-form-container">
+                <h2>Ask AI Math Assistant</h2>
+                <form method="POST">
+                    <input type="text" name="query" placeholder="Ask a math question" required>
+                    <button type="submit">Ask</button>
+                    <h2 class="ai-result">AI Response:</h2>
+                    <p class="ai-result">{{ ai_result }}</p>
+                </form>
+            </div>
+        </div>
+    </div>
+
+</body>
+<footer id="Contacts"style="background-color: #0E2431; color: white; padding: 10px 0; text-align: center;">
+    <div style="max-width: 1200px; margin: auto;">
+        <p style="font-size: 18px; margin-bottom: 10px;">Follow Us </p>
+        <div>
+            <a href="https://www.facebook.com" target="_blank" style="color: white; margin: 0 15px; font-size: 24px; text-decoration: none;">
+                <i class="fab fa-facebook"></i>
+            </a>
+            <a href="https://www.instagram.com" target="_blank" style="color: white; margin: 0 15px; font-size: 24px; text-decoration: none;">
+                <i class="fab fa-instagram"></i>
+            </a>
+            <a href="https://twitter.com" target="_blank" style="color: white; margin: 0 15px; font-size: 24px; text-decoration: none;">
+                <i class="fab fa-twitter"></i>
+            </a>
+        </div>
+        <p style="margin-top: 10px;"> Generative AI Calculator 2024 |&copy;  All rights reserved.</p>
+    </div>
+</footer>
+
+<!-- Font Awesome CDN for Icons -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/js/all.min.js"></script>
+
+
+</html>
