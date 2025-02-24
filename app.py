@@ -1,13 +1,19 @@
 from flask import Flask, render_template, request
 import random
 import wolframalpha
-
+import os
 # Initialize Flask app
 app = Flask(__name__)
 
 # Wolfram Alpha API setup
-api_key = "G8WX5E-77XKG66HUA"  # Replace with your actual API key
+api_key = os.getenv("WOLFRAM_API_KEY")
+
+if not api_key:
+    raise ValueError("API key is missing! Add it in Render Environment Variables.")
+
 client = wolframalpha.Client(api_key)
+# G8WX5E-77XKG66HUA
+
 
 # Arithmetic operations functions
 def add(x, y):
